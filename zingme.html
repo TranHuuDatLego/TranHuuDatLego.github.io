@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Music Player (Interactive)</title>
+    <style>
+        /* CSS TỪ VÍ DỤ TRƯỚC - GIỮ NGUYÊN */
+        /* Reset & Basic Styles */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121212; /* Dark background like Spotify */
+            color: #ffffff;
+            overflow: hidden; /* Prevent body scroll, individual sections will scroll */
+        }
+
+        a {
+            text-decoration: none;
+            color: #b3b3b3;
+        }
+
+        a:hover {
+            color: #ffffff;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        button {
+            background-color: transparent;
+            border: none;
+            color: #b3b3b3;
+            cursor: pointer;
+            padding: 0;
+        }
+        button:hover {
+            color: #ffffff;
+        }
+
+        /* Main Layout: Grid like Spotify Desktop */
+        .music-player-container {
+            display: grid;
+            grid-template-columns: 240px 1fr; /* Sidebar width and main content */
+            grid-template-rows: 1fr auto;    /* Main content fills height, player bar fixed height */
+            height: 100vh;
+            grid-template-areas:
+                "sidebar main-content"
+                "player-bar player-bar";
+        }
+
+        /* 1. Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background-color: #000000;
+            padding: 24px 8px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 0 16px 20px 16px;
+            color: #ffffff;
+        }
+
+        .sidebar-nav ul li a, .sidebar-nav ul li button {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .sidebar-nav ul li a.active, .sidebar-nav ul li button.active {
+            background-color: #282828;
+            color: #ffffff;
+        }
+        .sidebar-nav ul li a svg, .sidebar-nav ul li button svg {
+            margin-right: 16px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .sidebar-playlists {
+            padding: 20px 16px 0 16px;
+            border-top: 1px solid #282828;
+            margin-top: 10px;
+            flex-grow: 1; /* Allow playlists to take remaining space and scroll */
+            overflow-y: auto;
+        }
+        .sidebar-playlists h4 {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 10px;
+            color: #b3b3b3;
+        }
+        .sidebar-playlists ul li a {
+            display: block;
+            padding: 8px 0;
+            font-size: 0.85em;
+            color: #b3b3b3;
+        }
+        .sidebar-playlists ul li a:hover {
+            color: #ffffff;
+        }
+        .create-playlist-btn {
+            font-size: 0.9em !important;
+            font-weight: bold !important;
+            color: #b3b3b3 !important;
+        }
+        .create-playlist-btn:hover {
+            color: #ffffff !important;
+        }
+        .create-playlist-btn .plus-icon {
+            background-color: #b3b3b3;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            margin-right: 16px;
+            border-radius: 2px;
+        }
+        .create-playlist-btn:hover .plus-icon {
+            background-color: #ffffff;
+        }
+
+
+        /* 2. Main Content Area */
+        .main-content {
+            grid-area: main-content;
+            background: linear-gradient(rgba(40,40,40,0.8), #121212 50%); /* Subtle gradient at top */
+            overflow-y: auto;
+            padding: 20px 30px;
+        }
+        .main-content h1 {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        .content-section {
+            margin-bottom: 40px;
+        }
+        .content-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+        }
+        .card {
+            background-color: #181818;
+            padding: 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            position: relative; /* For play button */
+            cursor: pointer; /* Make the whole card clickable for simplicity or just the play button */
+        }
+        .card:hover {
+            background-color: #282828;
+        }
+        .card img.album-art {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .card h3.song-title { /* Added class for JS */
+            font-size: 1em;
+            margin: 0 0 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card p.song-artist { /* Added class for JS */
+            font-size: 0.85em;
+            color: #b3b3b3;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card .play-button-overlay {
+            position: absolute;
+            bottom: 80px; /* Adjust based on card content */
+            right: 20px;
+            background-color: #1DB954; /* Spotify green */
+            color: white;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            pointer-events: none; /* So it doesn't interfere with card click */
+        }
+        .card:hover .play-button-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* 3. Player Bar */
+        .player-bar {
+            grid-area: player-bar;
+            background-color: #181818;
+            border-top: 1px solid #282828;
+            padding: 0 16px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .player-bar .song-info {
+            display: flex;
+            align-items: center;
+            min-width: 180px; /* Spotify's min-width */
+            flex: 1 0 180px;
+        }
+        .player-bar .song-info img#now-playing-art { /* Added ID for JS */
+            width: 56px;
+            height: 56px;
+            margin-right: 12px;
+            border-radius: 4px;
+            background-color: #333; /* Placeholder if no art */
+        }
+        .player-bar .song-info .text-details h4#now-playing-title { /* Added ID for JS */
+            font-size: 0.9em;
+            margin: 0 0 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .player-bar .song-info .text-details p#now-playing-artist { /* Added ID for JS */
+            font-size: 0.75em;
+            color: #b3b3b3;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .player-bar .song-info .actions button {
+            margin-left: 16px;
+            font-size: 1.1em;
+        }
+
+        .player-bar .player-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 2 0 auto; /* Take more space but can shrink */
+            max-width: 722px; /* Spotify's max-width */
+        }
+        .player-bar .player-controls .buttons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .player-bar .player-controls .buttons button {
+            font-size: 1.2em;
+        }
+        .player-bar .player-controls .buttons .play-pause-btn#main-play-pause-btn { /* Added ID for JS */
+            font-size: 1.8em; /* Larger play button */
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .player-bar .player-controls .buttons .play-pause-btn#main-play-pause-btn:hover {
+            transform: scale(1.1);
+        }
+        .player-bar .progress-bar-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 8px;
+            font-size: 0.7em;
+            color: #b3b3b3;
+        }
+        .player-bar .progress-bar-container span#current-time { /* Added ID */
+            min-width: 30px; text-align: right;
+        }
+        .player-bar .progress-bar-container span#total-time { /* Added ID */
+            min-width: 30px;
+        }
+        .player-bar .progress-bar-container input#progress-bar[type="range"] { /* Added ID */
+            flex-grow: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #535353;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .player-bar .progress-bar-container input#progress-bar[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .player-bar .progress-bar-container input#progress-bar[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+
+        .player-bar .other-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            min-width: 180px;
+            flex: 1 0 180px;
+        }
+        .player-bar .other-controls button {
+            margin-left: 12px;
+            font-size: 1.1em;
+        }
+        .player-bar .other-controls .volume-bar-container {
+            display: flex;
+            align-items: center;
+            width: 100px; /* Fixed width for volume slider */
+        }
+        .player-bar .other-controls .volume-bar-container input#volume-bar[type="range"] { /* Added ID */
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #535353;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .player-bar .other-controls .volume-bar-container input#volume-bar[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+         .player-bar .other-controls .volume-bar-container input#volume-bar[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Placeholder SVG Icons (simple ones) */
+        .icon-home path, .icon-search path, .icon-library path,
+        .icon-add path, .icon-like path, .icon-lyrics path,
+        .icon-queue path, .icon-devices path, .icon-volume path,
+        .icon-shuffle path, .icon-prev path, .icon-play path,
+        .icon-pause path, .icon-next path, .icon-repeat path {
+            fill: currentColor;
+        }
+
+        /* Hidden audio element */
+        #audio-player {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <audio id="audio-player"></audio> <!-- THE AUDIO ELEMENT -->
+
+    <div class="music-player-container">
+        <!-- 1. Sidebar (NO CHANGES HERE FROM PREVIOUS) -->
+        <nav class="sidebar">
+            <div class="logo">MyMusic</div>
+            <div class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#" class="active">
+                            <svg viewBox="0 0 24 24" class="icon-home"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"></path></svg>
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" class="icon-search"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+                            Tìm kiếm
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" class="icon-library"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 2v5l-2.5-1.5L13 9V4h5zM8 16h12V4h-2v7l-2.5-1.5L13 9V4H8v12z"></path></svg>
+                            Thư viện
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-nav" style="margin-top: 24px;">
+                 <ul>
+                    <li>
+                        <button class="create-playlist-btn">
+                            <span class="plus-icon">+</span>
+                            Tạo playlist
+                        </button>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" class="icon-like"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                            Bài hát đã thích
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-playlists">
+                <h4>PLAYLISTS</h4>
+                <ul>
+                    <li><a href="#">Chill Hits</a></li>
+                    <li><a href="#">Workout Mix</a></li>
+                    <li><a href="#">Deep Focus</a></li>
+                     <li><a href="#">My Awesome Playlist 1</a></li>
+                     <li><a href="#">Another Playlist Name Goes Here</a></li>
+                     <li><a href="#">Oldies But Goodies</a></li>
+                     <li><a href="#">Road Trip Anthems</a></li>
+                     <li><a href="#">Study Beats</a></li>
+                     <li><a href="#">Late Night Vibes</a></li>
+                     <li><a href="#">Morning Coffee</a></li>
+                     <li><a href="#">Summer Jams 2024</a></li>
+                     <li><a href="#">Indie Discoveries</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- 2. Main Content Area -->
+        <main class="main-content">
+            <h1>Chào Trần Hữu Đạt</h1>
+            <section class="content-section">
+                <h2>Các nhạc yêu thích của tôi</h2>
+                <div class="card-grid">
+                    <!-- CARD 1: ADD data-src, data-title, data-artist, data-art -->
+                    <div class="card"
+                         data-src="audio/bac-phan.mp3"
+                         data-title="Bạc Phận"
+                         data-artist="Nghệ Sĩ A, Nghệ Sĩ B"
+                         data-art="img/bac-phan.jpg">
+                        <img src="img/bac-phan.jpg" alt="Album Art" class="album-art">
+                        <h3 class="song-title">Bạc Phận</h3>
+                        <p class="song-artist">Nghệ Sĩ A, Nghệ Sĩ B</p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+                     <!-- CARD 2 -->
+                    <div class="card"
+                         data-src="audio/song-gio.mp3"
+                         data-title="Sóng Gió"
+                         data-artist="Nghệ Sĩ Jack"
+                         data-art="img/song-gio.png">
+                        <img src="img/song-gio.png" alt="Album Art" class="album-art">
+                        <h3 class="song-title">Sóng Gió</h3>
+                        <p class="song-artist">Tên Ca Sĩ</p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+                     <!-- CARD 3 -->
+                    <div class="card"
+                         data-src="audio/thay-long.mp3" 
+                         data-title="Thay Lòng"
+                         data-artist="Nhiều nghệ sĩ"
+                         data-art="img/nal.png">
+                        <img src="img/nal.png" alt="Album Art" class="album-art">
+                        <h3 class="song-title">Thay Lòng</h3>
+                        <p class="song-artist">Nhiều nghệ sĩ</p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+                    <!-- ADD MORE CARDS SIMILARLY -->
+                    <div class="card"
+                         data-src="audio/making-my-way.mp3"
+                         data-title="Making My Way"
+                         data-artist="DJ X"
+                         data-art="img/making-my-way.jpg">
+                        <img src="img/making-my-way.jpg" alt="Album Art" class="album-art">
+                        <h3 class="song-title">Making My Way</h3>
+                        <p class="song-artist">DJ X</p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+                </div>
+            </section>
+            <!-- ... other sections ... -->
+        </main>
+
+        <!-- 3. Player Bar -->
+        <footer class="player-bar">
+            <div class="song-info">
+                <img src="https://via.placeholder.com/56/333/FFFFFF?text=Art" alt="Now Playing" id="now-playing-art">
+                <div class="text-details">
+                    <h4 id="now-playing-title">Chưa có nhạc</h4>
+                    <p id="now-playing-artist">Chọn một bài hát</p>
+                </div>
+                <div class="actions">
+                    <button title="Thích">
+                        <svg viewBox="0 0 24 24" width="18" height="18" class="icon-like"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <div class="buttons">
+                    <button title="Ngẫu nhiên">
+                        <svg viewBox="0 0 24 24" width="20" height="20" class="icon-shuffle"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"></path></svg>
+                    </button>
+                    <button title="Trước">
+                        <svg viewBox="0 0 24 24" width="20" height="20" class="icon-prev"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>
+                    </button>
+                    <button class="play-pause-btn" id="main-play-pause-btn" title="Phát">
+                        <svg viewBox="0 0 24 24" width="24" height="24" class="icon-play"><path d="M8 5v14l11-7z"></path></svg>
+                    </button>
+                    <button title="Tiếp theo">
+                        <svg viewBox="0 0 24 24" width="20" height="20" class="icon-next"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>
+                    </button>
+                    <button title="Lặp lại">
+                        <svg viewBox="0 0 24 24" width="20" height="20" class="icon-repeat"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"></path></svg>
+                    </button>
+                </div>
+                <div class="progress-bar-container">
+                    <span id="current-time">0:00</span>
+                    <input type="range" id="progress-bar" min="0" max="100" value="0" title="Thanh tiến trình">
+                    <span id="total-time">0:00</span>
+                </div>
+            </div>
+
+            <div class="other-controls">
+                <button title="Lời bài hát">
+                    <svg viewBox="0 0 24 24" width="18" height="18" class="icon-lyrics"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path></svg>
+                </button>
+                <button title="Hàng đợi">
+                     <svg viewBox="0 0 24 24" width="18" height="18" class="icon-queue"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zm0-10h14V7H7v2z"></path></svg>
+                </button>
+                <button title="Âm lượng">
+                    <svg viewBox="0 0 24 24" width="18" height="18" class="icon-volume"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <div class="volume-bar-container">
+                    <input type="range" id="volume-bar" min="0" max="100" value="70" title="Thanh âm lượng">
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audioPlayer = document.getElementById('audio-player');
+            const songCards = document.querySelectorAll('.card');
+            const mainPlayPauseBtn = document.getElementById('main-play-pause-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const currentTimeEl = document.getElementById('current-time');
+            const totalTimeEl = document.getElementById('total-time');
+            const volumeBar = document.getElementById('volume-bar');
+
+            const nowPlayingArt = document.getElementById('now-playing-art');
+            const nowPlayingTitle = document.getElementById('now-playing-title');
+            const nowPlayingArtist = document.getElementById('now-playing-artist');
+
+            const playIconSVG = '<svg viewBox="0 0 24 24" width="24" height="24" class="icon-play"><path d="M8 5v14l11-7z"></path></svg>';
+            const pauseIconSVG = '<svg viewBox="0 0 24 24" width="24" height="24" class="icon-pause"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>';
+
+            let currentSongSrc = null;
+
+            // Function to format time (MM:SS)
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Update Play/Pause button icon
+            function updatePlayPauseIcon(isPlaying) {
+                mainPlayPauseBtn.innerHTML = isPlaying ? pauseIconSVG : playIconSVG;
+                mainPlayPauseBtn.title = isPlaying ? "Tạm dừng" : "Phát";
+            }
+
+            // Play a new song
+            function playSong(songData) {
+                const { src, title, artist, art } = songData;
+
+                audioPlayer.src = src;
+                audioPlayer.play()
+                    .then(() => {
+                        updatePlayPauseIcon(true);
+                        nowPlayingTitle.textContent = title;
+                        nowPlayingArtist.textContent = artist;
+                        nowPlayingArt.src = art;
+                        currentSongSrc = src; // Track current song
+                    })
+                    .catch(error => console.error("Error playing audio:", error));
+            }
+
+            // Event listener for song cards
+            songCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const songData = {
+                        src: card.dataset.src,
+                        title: card.dataset.title,
+                        artist: card.dataset.artist,
+                        art: card.dataset.art
+                    };
+                    if (songData.src) {
+                       if (currentSongSrc === songData.src && !audioPlayer.paused) {
+                            audioPlayer.pause();
+                            updatePlayPauseIcon(false);
+                        } else if (currentSongSrc === songData.src && audioPlayer.paused) {
+                            audioPlayer.play().catch(e => console.error(e));
+                            updatePlayPauseIcon(true);
+                        }
+                        else {
+                            playSong(songData);
+                        }
+                    }
+                });
+            });
+
+            // Event listener for main Play/Pause button
+            mainPlayPauseBtn.addEventListener('click', () => {
+                if (!audioPlayer.src) { // No song loaded
+                    // Optionally, play the first song in the list or do nothing
+                    if (songCards.length > 0 && songCards[0].dataset.src) {
+                         const firstSongData = {
+                            src: songCards[0].dataset.src,
+                            title: songCards[0].dataset.title,
+                            artist: songCards[0].dataset.artist,
+                            art: songCards[0].dataset.art
+                        };
+                        playSong(firstSongData);
+                    }
+                    return;
+                }
+
+                if (audioPlayer.paused) {
+                    audioPlayer.play().catch(error => console.error("Error playing audio:", error));
+                } else {
+                    audioPlayer.pause();
+                }
+                updatePlayPauseIcon(!audioPlayer.paused);
+            });
+
+            // Audio element events
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                progressBar.max = audioPlayer.duration;
+                totalTimeEl.textContent = formatTime(audioPlayer.duration);
+            });
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                progressBar.value = audioPlayer.currentTime;
+                currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+            });
+
+            audioPlayer.addEventListener('play', () => {
+                updatePlayPauseIcon(true);
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                updatePlayPauseIcon(false);
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                updatePlayPauseIcon(false);
+                // Optionally: play next song in a playlist
+            });
+
+            // Progress bar seeking
+            progressBar.addEventListener('input', () => {
+                audioPlayer.currentTime = progressBar.value;
+            });
+
+            // Volume control
+            volumeBar.addEventListener('input', () => {
+                audioPlayer.volume = volumeBar.value / 100;
+            });
+            // Set initial volume
+            audioPlayer.volume = volumeBar.value / 100;
+
+
+            // Sidebar active item (simple example - no change from previous)
+            const navLinks = document.querySelectorAll('.sidebar-nav a, .sidebar-nav button');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    navLinks.forEach(node => node.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
