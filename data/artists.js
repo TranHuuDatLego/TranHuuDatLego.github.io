@@ -99,6 +99,28 @@ const ALL_MOCK_ARTISTS = {
         singles: [
              { id: "single_htl_gieoque", title: "Gieo Quẻ", year: "2022", artUrl: "https://i.scdn.co/image/ab67616d00001e02b1b1b1b1b1b1b1b1b1b1b1b1", audioSrc: "audio/htl_gieoque.mp3" }, // Placeholder art
         ]
+    },
+    "Mahiru": {
+        id: "Mahiru",
+        name: "Shinna Mahiru",
+        avatarUrl: "img/mahiru4.png", // Giả định
+        bannerUrl: "img/mahiru1.png", // Giả định
+        monthlyListeners: "1,200,800",
+        bio: "Shinna Mahiru là một ca sĩ và nhạc sĩ nổi tiếng trong cộng đồng âm nhạc Nhật Bản. Cô được biết đến với giọng hát ngọt ngào và phong cách âm nhạc độc đáo.",
+        isFollowing: true,
+        popularSongs: [
+            { id: "mahiru1", title: "小さな恋のうた", plays: "220M", albumArt: "img/mahiru1.png", audioSrc: "audio/mahiru_ed1.mp3" },
+            { id: "mahiru2", title: "愛唄", plays: "180M", albumArt: "img/mahiru2.png", audioSrc: "audio/mahiru_ed2.mp3" }, // Placeholder art
+            { id: "mahiru3", title: "君に届け", plays: "150M", albumArt: "img/mahiru3.png", audioSrc: "audio/mahiru_ed3.mp3" }, // Placeholder art
+            { id: "mahiru4", title: "君に届け - Instrumental", plays: "100M", albumArt: "img/mahiru4.png", audioSrc: "audio/mahiru_ed3_Instrumental.mp3" }, // Placeholder art
+        ],
+        albums: [
+            { id: "album_htl_link", title: "LINK", year: "2022", artUrl: "https://i.scdn.co/image/ab67616d0000b273293b8c062a9e6c0f8a2d8c1e", songs: [] },
+            { id: "album_htl_hoang", title: "Hoàng", year: "2019", artUrl: "https://i.scdn.co/image/ab67616d0000b273e0e0e0e0e0e0e0e0e0e0e0e0", songs: [] }, // Placeholder art
+        ],
+        singles: [
+             { id: "single_htl_gieoque", title: "Gieo Quẻ", year: "2022", artUrl: "https://i.scdn.co/image/ab67616d00001e02b1b1b1b1b1b1b1b1b1b1b1b1", audioSrc: "audio/htl_gieoque.mp3" }, // Placeholder art
+        ]
     }
     // Thêm các nghệ sĩ khác ở đây với key là artistId
 };
