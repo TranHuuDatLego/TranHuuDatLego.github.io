@@ -145,6 +145,7 @@ button:hover {
     background: linear-gradient(rgba(40,40,40,0.8), #121212 50%); /* Subtle gradient at top */
     overflow-y: auto;
     padding: 20px 30px;
+    scroll-behavior: smooth; /* Kích hoạt cuộn mượt cho main-content */
 }
 .main-content h1 {
     font-size: 2em;
@@ -173,9 +174,19 @@ button:hover {
 .card:hover {
     background-color: #282828;
 }
+
 .card img.album-art {
-    width: 100%;
-    border-radius: 4px;
+    width: 100%; /* Chiếm toàn bộ chiều rộng của .card padding box */
+    /* height: auto; */ /* Bỏ height: auto nếu có, để aspect-ratio kiểm soát */
+
+    aspect-ratio: 1 / 1; /* QUAN TRỌNG: Đảm bảo ảnh là hình vuông */
+                         /* Tỷ lệ 1/1 nghĩa là chiều rộng = chiều cao */
+
+    object-fit: cover;   /* QUAN TRỌNG: Ảnh sẽ lấp đầy không gian vuông,
+                            phần thừa sẽ bị cắt, giữ nguyên tỷ lệ gốc của ảnh. */
+    object-position: center center; /* Căn giữa ảnh khi bị cắt (mặc định) */
+
+    border-radius: 4px; /* Giữ lại bo góc nếu muốn */
     margin-bottom: 12px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
@@ -237,12 +248,15 @@ button:hover {
     min-width: 180px; /* Spotify's min-width */
     flex: 1 0 180px;
 }
-.player-bar .song-info img#now-playing-art { /* Added ID for JS */
+.player-bar .song-info img#now-playing-art {
     width: 56px;
-    height: 56px;
+    height: 56px; /* Đảm bảo vuông */
+    /* aspect-ratio: 1 / 1; */
+    object-fit: cover;
+    object-position: center center;
     margin-right: 12px;
     border-radius: 4px;
-    background-color: #333; /* Placeholder if no art */
+    background-color: #333;
 }
 .player-bar .song-info .text-details h4#now-playing-title { /* Added ID for JS */
     font-size: 0.9em;
@@ -534,9 +548,15 @@ button:hover {
     width: 20px;
     text-align: right;
 }
+/* Nếu bạn muốn ảnh nhỏ trong danh sách bài hát (ví dụ: trang nghệ sĩ) cũng vuông: */
 .song-list-item img.album-art-small {
-    width: 40px;
-    height: 40px;
+    width: 40px; /* Hoặc kích thước bạn muốn */
+    height: 40px; /* Đặt chiều cao bằng chiều rộng để đảm bảo vuông */
+    /* Hoặc dùng aspect-ratio: 1 / 1; nếu width có thể thay đổi */
+    /* aspect-ratio: 1 / 1; */
+
+    object-fit: cover;
+    object-position: center center;
     border-radius: 4px;
 }
 .song-list-item .song-details {
@@ -655,11 +675,13 @@ button:hover {
         flex-basis: 100px; /* Giảm không gian cơ bản */
         margin-right: 5px;
     }
+/* Điều chỉnh cho responsive nếu cần */
+
     .player-bar .song-info img#now-playing-art {
-        width: 48px; /* Giảm kích thước ảnh bìa */
-        height: 48px;
-        margin-right: 8px;
+        width: 48px;
+        height: 48px; /* Đảm bảo vuông */
     }
+    
     .player-bar .song-info .text-details h4#now-playing-title {
         font-size: 0.85em;
     }
@@ -803,3 +825,9 @@ button:hover {
         font-size: 0.75em;
     }
 }
+
+
+
+
+
+

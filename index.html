@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Music Player (Interactive)</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link tới file CSS chung -->
+
+    <link rel="icon" href="img/favicon.png" type="image/png">
 </head>
 
 <body>
@@ -16,7 +18,7 @@
     <div class="music-player-container">
         <!-- 1. Sidebar (NO CHANGES HERE FROM PREVIOUS) -->
         <nav class="sidebar">
-            <div class="logo">MyMusic</div>
+            <div><img src="img/logo.png" height="80"></div>
             <div class="sidebar-nav">
                 <ul>
                     <li>
@@ -72,8 +74,9 @@
             <div class="sidebar-playlists">
                 <h4>PLAYLISTS</h4>
                 <ul>
-                    <li><a href="#">Chill Hits</a></li>
-                    <li><a href="#">Workout Mix</a></li>
+                    <li><a href="#Favorite">List nhạc yêu thích của tôi</a></li>
+                    <li><a href="#Mahiru">Thiên sứ nhà bên</a></li>
+                    <li><a href="#SummerPockets">Summer Pockets OST</a></li> 
                     <li><a href="#">Deep Focus</a></li>
                     <li><a href="#">My Awesome Playlist 1</a></li>
                     <li><a href="#">Another Playlist Name Goes Here</a></li>
@@ -91,8 +94,8 @@
         <!-- 2. Main Content Area -->
         <main class="main-content">
             <h1>Chào Trần Hữu Đạt</h1>
-            <section class="content-section">
-                <h2>Các nhạc yêu thích của tôi</h2>
+            <section id="Favorite" class="content-section">
+                <h2>List nhạc yêu thích của tôi</h2>
                 <div class="card-grid">
                     <!-- CARD 1: ADD data-src, data-title, data-artist, data-art -->
                     <div class="card" data-src="audio/bac-phan.mp3" data-title="Bạc Phận"
@@ -139,7 +142,7 @@
             </section>
 
 
-            <section class="content-section">
+            <section id="Mahiru" class="content-section">
                 <h2>Thiên sứ nhà bên - Mahiru</h2>
                 <div class="card-grid">
                     <!-- CARD 1: ADD data-src, data-title, data-artist, data-art -->
@@ -184,12 +187,111 @@
                     </div>
                 </div>
             </section>
+
+                        <section id="SummerPockets" class="content-section">
+                <h2>Summer Pockets - Original SoundTrack & Vocal Albums</h2>
+                <div class="card-grid">
+                    <!-- AlkaFeel -->
+                    <div class="card"
+                         data-src="audio/summer_pockets_op.mp3"
+                         data-title="アルカレイド (Alkaleido)"
+                         data-artist="鈴木このみ (Konomi Suzuki)"
+                         data-art="img/summer_pockets_op.png">
+                        <img src="img/summer_pockets_op.png" alt="Summer Pockets OST" class="album-art">
+                        <h3 class="song-title">アルカレイド</h3>
+                        <p class="song-artist">
+                            <a href="artist_page.html?artistId=KonomiSuzuki">Konomi Suzuki</a>
+                        </p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+
+                    <!-- Lasting Moment -->
+                    <div class="card"
+                         data-src="audio/summer_pockets_ed.mp3"
+                         data-title="Lasting Moment"
+                         data-artist="鈴木このみ (Konomi Suzuki)"
+                         data-art="img/Tsumugi.png">
+                        <img src="img/Tsumugi.png" alt="Reflection Blue OP" class="album-art">
+                        <h3 class="song-title">Lasting Moment</h3>
+                        <p class="song-artist">
+                            <a href="artist_page.html?artistId=KonomiSuzuki">Konomi Suzuki</a>
+                        </p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+
+                    <!-- 羽のゆりかご (Hane no Yurikago) -->
+                    <div class="card"
+                         data-src="audio/Hane no Yurikago.mp3"
+                         data-title="羽のゆりかご"
+                         data-artist="水谷瑠奈 (NanosizeMir)"
+                         data-art="img/Hane no Yurikago.png">
+                        <img src="img/Hane no Yurikago.png" alt="Hane no Yurikago" class="album-art">
+                        <h3 class="song-title">羽のゆりかご</h3>
+                        <p class="song-artist">
+                            <a href="artist_page.html?artistId=RunaMizutani">水谷瑠奈 (NanosizeMir)</a>
+                        </p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+
+                    <!-- Sea, You & Me -->
+                    <div class="card"
+                         data-src="audio/Tsumugi.mp3"
+                         data-title="Sea, You & Me"
+                         data-artist="紬ヴェンダース (CV: 岩井映美里)"
+                         data-art="img/Tsumugi.png">
+                        <img src="img/Tsumugi.png" alt="Tsumugi Character Song" class="album-art">
+                        <h3 class="song-title">Sea, You & Me</h3>
+                        <p class="song-artist">
+                            <a href="artist_page.html?artistId=TsumugiWenders">紬ヴェンダース</a>
+                        </p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+
+                     <!-- Hamu 20th Anniversary -->
+                    <div class="card"
+                         data-src="audio/summer_pockets_op_20th_Key.mp3"
+                         data-title="Hamu 20th Anniversary"
+                         data-artist="Instrumental"
+                         data-art="img/key20th.png">
+                        <img src="img/key20th.png" alt="Summer Pockets BGM" class="album-art">
+                        <h3 class="song-title">Hamu 20th Anniversary</h3>
+                        <p class="song-artist">
+                            <a href="artist_page.html?artistId=KeySoundLabel">Key Sound Label</a>
+                        </p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+
+                    <!-- アスタロア (Asterlore) - Reflection Blue -->
+                     <div class="card"
+                         data-src="audio/Summer_Pockets_Asterlore.mp3"
+                         data-title="アスタロア (Asterlore)"
+                         data-artist="riya (eufonius)"
+                         data-art="img/Summer_Pockets_Asterlore.png">
+                        <img src="img/Summer_Pockets_Asterlore.png" alt="Reflection Blue ED" class="album-art">
+                        <h3 class="song-title">アスタロア</h3>
+                        <p class="song-artist">
+                            <a href="artist_page.html?artistId=riyaEufonius">riya (eufonius)</a>
+                        </p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+
+                    <!-- 他の楽曲も同様に追加 -->
+                    <!-- Ví dụ:
+                    <div class="card" data-src="audio/summerpockets_another_song.mp3" data-title="Another Song Title" data-artist="Artist Name" data-art="img/another_song_art.jpg">
+                        <img src="img/another_song_art.jpg" alt="Album Art" class="album-art">
+                        <h3 class="song-title">Another Song Title</h3>
+                        <p class="song-artist"><a href="artist_page.html?artistId=SomeArtist">Artist Name</a></p>
+                        <button class="play-button-overlay">▶</button>
+                    </div>
+                    -->
+                </div>
+            </section>
         </main>
 
         <!-- 3. Player Bar -->
         <footer class="player-bar">
             <div class="song-info">
-                <img src="https://via.placeholder.com/56/333/FFFFFF?text=Art" alt="Now Playing" id="now-playing-art">
+                <img src="img/favicon.png" alt="Now Playing" id="now-playing-art">
                 <div class="text-details">
                     <h4 id="now-playing-title">Chưa có nhạc</h4>
                     <p id="now-playing-artist">Chọn một bài hát</p>
