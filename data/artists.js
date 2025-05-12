@@ -24,15 +24,6 @@ const ALL_MOCK_ARTISTS = {
             { id: "single_makingmyway", title: "Making My Way", year: "2023", artUrl: "https://i.scdn.co/image/ab67616d0000b27362c8a02e940cd758a6230a1a", audioSrc: "audio/song1.mp3" },
         ]
     },
-    // Thêm các nghệ sĩ khác ở đây với key là artistId
-    "another-artist": {
-        id: "another-artist",
-        name: "Một Nghệ Sĩ Khác",
-        // ... thông tin tương tự
-        popularSongs: [],
-        albums: [],
-        singles: []
-    },
     "jack": {
         id: "jack",
         name: "Jack - J97",
@@ -100,8 +91,8 @@ const ALL_MOCK_ARTISTS = {
              { id: "single_htl_gieoque", title: "Gieo Quẻ", year: "2022", artUrl: "https://i.scdn.co/image/ab67616d00001e02b1b1b1b1b1b1b1b1b1b1b1b1", audioSrc: "audio/htl_gieoque.mp3" }, // Placeholder art
         ]
     },
-    "Mahiru": {
-        id: "Mahiru",
+    "MahiruShiina": {
+        id: "MahiruShiina",
         name: "Shinna Mahiru",
         avatarUrl: "img/mahiru4.png", // Giả định
         bannerUrl: "img/mahiru1.png", // Giả định

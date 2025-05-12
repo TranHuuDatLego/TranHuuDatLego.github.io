@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="search.html">
                             <svg viewBox="0 0 24 24" class="icon-search">
                                 <path
                                     d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="library.html">
                             <svg viewBox="0 0 24 24" class="icon-library">
                                 <path
                                     d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 2v5l-2.5-1.5L13 9V4h5zM8 16h12V4h-2v7l-2.5-1.5L13 9V4H8v12z">
@@ -49,18 +49,9 @@
                             Thư viện
                         </a>
                     </li>
-                </ul>
-            </div>
-            <div class="sidebar-nav" style="margin-top: 24px;">
-                <ul>
+            
                     <li>
-                        <button class="create-playlist-btn">
-                            <span class="plus-icon">+</span>
-                            Tạo playlist
-                        </button>
-                    </li>
-                    <li>
-                        <a href="#">
+                        <a href="favorite.html"> <!-- Link Bài hát đã thích giữ nguyên hoặc tạo trang riêng -->
                             <svg viewBox="0 0 24 24" class="icon-like">
                                 <path
                                     d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
@@ -69,223 +60,32 @@
                             Bài hát đã thích
                         </a>
                     </li>
+                    <!-- THÊM LINK GIỚI THIỆU -->
+                    <li>
+                        <a href="about.html" class="sidebar-link"> <!-- Đặt class sidebar-link nếu muốn style riêng -->
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" class="icon-info">
+                                <path
+                                    d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z">
+                                </path>
+                            </svg>
+                            Giới thiệu
+                        </a>
+                    </li>
+
                 </ul>
             </div>
             <div class="sidebar-playlists">
                 <h4>PLAYLISTS</h4>
-                <ul>
-                    <li><a href="#Favorite">List nhạc yêu thích của tôi</a></li>
-                    <li><a href="#Mahiru">Thiên sứ nhà bên</a></li>
-                    <li><a href="#SummerPockets">Summer Pockets OST</a></li> 
-                    <li><a href="#">Deep Focus</a></li>
-                    <li><a href="#">My Awesome Playlist 1</a></li>
-                    <li><a href="#">Another Playlist Name Goes Here</a></li>
-                    <li><a href="#">Oldies But Goodies</a></li>
-                    <li><a href="#">Road Trip Anthems</a></li>
-                    <li><a href="#">Study Beats</a></li>
-                    <li><a href="#">Late Night Vibes</a></li>
-                    <li><a href="#">Morning Coffee</a></li>
-                    <li><a href="#">Summer Jams 2024</a></li>
-                    <li><a href="#">Indie Discoveries</a></li>
+                <ul id="playlist-links-list">
+                    <!-- Các link playlist sẽ được tạo bởi JavaScript ở đây -->
                 </ul>
             </div>
         </nav>
 
         <!-- 2. Main Content Area -->
-        <main class="main-content">
+        <main class="main-content" id="main-music-content">
             <h1>Chào Trần Hữu Đạt</h1>
-            <section id="Favorite" class="content-section">
-                <h2>List nhạc yêu thích của tôi</h2>
-                <div class="card-grid">
-                    <!-- CARD 1: ADD data-src, data-title, data-artist, data-art -->
-                    <div class="card" data-src="audio/bac-phan.mp3" data-title="Bạc Phận"
-                        data-artist="Nghệ Sĩ A, Nghệ Sĩ B" data-art="img/bac-phan.jpg">
-                        <img src="img/bac-phan.jpg" alt="Album Art" class="album-art">
-                        <h3 class="song-title">Bạc Phận</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=jack">Jack</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    <!-- CARD 2 -->
-                    <div class="card" data-src="audio/song-gio.mp3" data-title="Sóng Gió" data-artist="Nghệ Sĩ Jack"
-                        data-art="img/song-gio.png">
-                        <img src="img/song-gio.png" alt="Album Art" class="album-art">
-                        <h3 class="song-title">Sóng Gió</h3>
-
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=jack">Jack</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    <!-- CARD 3 -->
-                    <div class="card" data-src="audio/thay-long-nal.mp3" data-title="Thay Lòng" data-artist="Nhiều nghệ sĩ"
-                        data-art="img/nal.png">
-                        <img src="img/nal.png" alt="Album Art" class="album-art">
-                        <h3 class="song-title">Thay Lòng</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=nal">Nal</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    <!-- ADD MORE CARDS SIMILARLY -->
-                    <div class="card" data-src="audio/making-my-way.mp3" data-title="Making My Way" data-artist="DJ X"
-                        data-art="img/making-my-way.jpg">
-                        <img src="img/making-my-way.jpg" alt="Album Art" class="album-art">
-                        <h3 class="song-title">Making My Way</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=son-tung-mtp">Sơn Tùng MTP</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                </div>
-            </section>
-
-
-            <section id="Mahiru" class="content-section">
-                <h2>Thiên sứ nhà bên - Mahiru</h2>
-                <div class="card-grid">
-                    <!-- CARD 1: ADD data-src, data-title, data-artist, data-art -->
-                    <div class="card" data-src="audio/mahiru_ed1.mp3" data-title="小さな恋のうた" data-artist="CV.石見舞菜香"
-                        data-art="img/mahiru1.png">
-                        <img src="img/mahiru1.png" alt="Album Art" class="album-art">
-                        <h3 class="song-title">小さな恋のうた</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=Mahiru">Mahiru</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    <!-- CARD 2 -->
-                    <div class="card" data-src="audio/mahiru_ed2.mp3" data-title="愛唄" data-artist="CV.石見舞菜香"
-                        data-art="img/mahiru2.png">
-                        <img src="img/mahiru2.png" alt="Album Art" class="album-art">
-                        <h3 class="song-title">愛唄</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=Mahiru">Mahiru</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    <!-- CARD 3 -->
-                    <div class="card" data-src="audio/mahiru_ed3.mp3" data-title="君に届け" data-artist="CV.石見舞菜香"
-                        data-art="img/mahiru3.png">
-                        <img src="img/mahiru3.png" alt="Album Art" class="album-art">
-                        <h3 class="song-title">君に届け</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=Mahiru">Mahiru</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    <!-- ADD MORE CARDS SIMILARLY -->
-                    <div class="card" data-src="audio/mahiru_ed3_Instrumental.mp3" data-title="君に届け - Instrumental" data-artist="CV.石見舞菜香"
-                        data-art="img/mahiru4.png">
-                        <img src="img/mahiru4.png" alt="Album Art" class="album-art">
-                        <h3 class="song-title">君に届け - Instrumental</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=Mahiru">Mahiru</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                </div>
-            </section>
-
-                        <section id="SummerPockets" class="content-section">
-                <h2>Summer Pockets - Original SoundTrack & Vocal Albums</h2>
-                <div class="card-grid">
-                    <!-- AlkaFeel -->
-                    <div class="card"
-                         data-src="audio/summer_pockets_op.mp3"
-                         data-title="アルカレイド (Alkaleido)"
-                         data-artist="鈴木このみ (Konomi Suzuki)"
-                         data-art="img/summer_pockets_op.png">
-                        <img src="img/summer_pockets_op.png" alt="Summer Pockets OST" class="album-art">
-                        <h3 class="song-title">アルカレイド</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=KonomiSuzuki">Konomi Suzuki</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-
-                    <!-- Lasting Moment -->
-                    <div class="card"
-                         data-src="audio/summer_pockets_ed.mp3"
-                         data-title="Lasting Moment"
-                         data-artist="鈴木このみ (Konomi Suzuki)"
-                         data-art="img/Tsumugi.png">
-                        <img src="img/Tsumugi.png" alt="Reflection Blue OP" class="album-art">
-                        <h3 class="song-title">Lasting Moment</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=KonomiSuzuki">Konomi Suzuki</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-
-                    <!-- 羽のゆりかご (Hane no Yurikago) -->
-                    <div class="card"
-                         data-src="audio/Hane no Yurikago.mp3"
-                         data-title="羽のゆりかご"
-                         data-artist="水谷瑠奈 (NanosizeMir)"
-                         data-art="img/Hane no Yurikago.png">
-                        <img src="img/Hane no Yurikago.png" alt="Hane no Yurikago" class="album-art">
-                        <h3 class="song-title">羽のゆりかご</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=RunaMizutani">水谷瑠奈 (NanosizeMir)</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-
-                    <!-- Sea, You & Me -->
-                    <div class="card"
-                         data-src="audio/Tsumugi.mp3"
-                         data-title="Sea, You & Me"
-                         data-artist="紬ヴェンダース (CV: 岩井映美里)"
-                         data-art="img/Tsumugi.png">
-                        <img src="img/Tsumugi.png" alt="Tsumugi Character Song" class="album-art">
-                        <h3 class="song-title">Sea, You & Me</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=TsumugiWenders">紬ヴェンダース</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-
-                     <!-- Hamu 20th Anniversary -->
-                    <div class="card"
-                         data-src="audio/summer_pockets_op_20th_Key.mp3"
-                         data-title="Hamu 20th Anniversary"
-                         data-artist="Instrumental"
-                         data-art="img/key20th.png">
-                        <img src="img/key20th.png" alt="Summer Pockets BGM" class="album-art">
-                        <h3 class="song-title">Hamu 20th Anniversary</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=KeySoundLabel">Key Sound Label</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-
-                    <!-- アスタロア (Asterlore) - Reflection Blue -->
-                     <div class="card"
-                         data-src="audio/Summer_Pockets_Asterlore.mp3"
-                         data-title="アスタロア (Asterlore)"
-                         data-artist="riya (eufonius)"
-                         data-art="img/Summer_Pockets_Asterlore.png">
-                        <img src="img/Summer_Pockets_Asterlore.png" alt="Reflection Blue ED" class="album-art">
-                        <h3 class="song-title">アスタロア</h3>
-                        <p class="song-artist">
-                            <a href="artist_page.html?artistId=riyaEufonius">riya (eufonius)</a>
-                        </p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-
-                    <!-- 他の楽曲も同様に追加 -->
-                    <!-- Ví dụ:
-                    <div class="card" data-src="audio/summerpockets_another_song.mp3" data-title="Another Song Title" data-artist="Artist Name" data-art="img/another_song_art.jpg">
-                        <img src="img/another_song_art.jpg" alt="Album Art" class="album-art">
-                        <h3 class="song-title">Another Song Title</h3>
-                        <p class="song-artist"><a href="artist_page.html?artistId=SomeArtist">Artist Name</a></p>
-                        <button class="play-button-overlay">▶</button>
-                    </div>
-                    -->
-                </div>
-            </section>
+            <!-- Các section nhạc sẽ được tạo bởi JavaScript ở đây -->
         </main>
 
         <!-- 3. Player Bar -->
@@ -373,9 +173,12 @@
         </footer>
     </div>
 </body>
-<script src="player.js"></script> <!-- Link tới file JavaScript -->
-
-<script src="data/artists.js"></script> <!-- Link tới file JavaScript -->
-<script src="artist_page.js"></script> <!-- Link tới file JavaScript cho trang nghệ sĩ -->
+<!-- Scripts -->
+<script src="data/artists.js"></script>
+<script src="data/music.js"></script>
+<script src="js/utils.js"></script> <!-- Nạp file utils -->
+<script src="js/player.js"></script>
+<script src="js/main.js"></script> <!-- Thay vì search.js -->
+<!-- <script src="artist_page.js"></script> Nếu dùng -->
 
 </html>
