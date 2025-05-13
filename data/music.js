@@ -90,6 +90,16 @@ const ALL_MUSIC_SECTIONS = [
                 audioSrc: "audio/mahiru_ed3_Instrumental.mp3",
                 isFavorite: true,
                 plays: "1.567.890" // Random
+            },
+            {
+                id: "mahiru5",
+                title: "ギフト - Pf Solo ver.",
+                artistData: "Instrumental",
+                displayArtist: { name: "椎名真昼 (CV: 石見舞菜香)", id: "MahiruShiina" },
+                artUrl: "img/mahiru_gift.png",
+                audioSrc: "audio/mahiru_gift.mp3",
+                isFavorite: true,
+                plays: "467.790" // Random
             }
         ]
     },
