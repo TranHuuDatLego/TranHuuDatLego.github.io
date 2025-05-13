@@ -1,7 +1,51 @@
 // utils.js
+console.log("utils.js loading...");
 
-// --- Hàm tạo một card bài hát ---
-// Hàm này sẽ được gọi từ main.js và search.js
+// --- Hàm format thời gian (MM:SS) ---
+function formatTime(seconds) {
+    if (isNaN(seconds) || !isFinite(seconds) || seconds < 0) return "N/A";
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+// --- Hàm lấy duration của một file audio (trả về Promise) ---
+function getAudioFileDuration(audioSrc) {
+    return new Promise((resolve) => {
+        if (!audioSrc) {
+            // console.warn("getAudioFileDuration: audioSrc không được cung cấp.");
+            resolve("0:00"); // Trả về giá trị mặc định nếu không có src
+            return;
+        }
+        const audio = new Audio();
+        audio.preload = "metadata"; // Chỉ tải metadata
+
+        audio.onloadedmetadata = () => {
+            if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+                // console.log(`Duration for ${audioSrc}: ${audio.duration}`);
+                resolve(formatTime(audio.duration)); // Sử dụng formatTime cục bộ
+            } else {
+                // console.warn(`getAudioFileDuration: Duration không hợp lệ cho ${audioSrc}. Giá trị: ${audio.duration}`);
+                resolve("N/A");
+            }
+            // Giải phóng tài nguyên sau khi lấy metadata
+            audio.src = ""; // Xóa src để dừng tải thêm
+            audio.load();   // Yêu cầu trình duyệt hủy bỏ tải
+        };
+        audio.onerror = (e) => {
+            // console.warn(`getAudioFileDuration: Lỗi khi tải metadata cho ${audioSrc}:`, e);
+            resolve("N/A");
+        };
+        try {
+            audio.src = audioSrc;
+        } catch (error) {
+            console.error(`getAudioFileDuration: Lỗi khi gán src cho audio ${audioSrc}:`, error);
+            resolve("N/A");
+        }
+    });
+}
+
+// --- Hàm tạo một card bài hát (cho view dạng lưới/card) ---
 function createSongCard(songData) {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -24,9 +68,8 @@ function createSongCard(songData) {
     artistP.classList.add('song-artist');
     if (songData.displayArtist && songData.displayArtist.id && songData.displayArtist.name) {
         const artistLink = document.createElement('a');
-        artistLink.href = `artist_page.html?artistId=${songData.displayArtist.id}`;
+        artistLink.href = `artist_page.html?artistId=${encodeURIComponent(songData.displayArtist.id)}`;
         artistLink.textContent = songData.displayArtist.name;
-        // Ngăn link nghệ sĩ tự kích hoạt phát nhạc của card cha
         artistLink.addEventListener('click', (e) => e.stopPropagation());
         artistP.appendChild(artistLink);
     } else if (songData.displayArtist && songData.displayArtist.name) {
@@ -38,113 +81,96 @@ function createSongCard(songData) {
     const playButton = document.createElement('button');
     playButton.classList.add('play-button-overlay');
     playButton.innerHTML = '▶';
-    // Ngăn nút play tự kích hoạt sự kiện click của card cha (nếu cần)
-    // playButton.addEventListener('click', (e) => e.stopPropagation());
 
     card.appendChild(img);
     card.appendChild(titleH3);
     card.appendChild(artistP);
     card.appendChild(playButton);
 
-    // **QUAN TRỌNG:** Gắn listener sẽ được thực hiện bởi hàm gọi createSongCard
-    // thông qua hàm addCardClickListener được expose từ player.js
-    if (typeof window.addCardClickListener === 'function') {
-         window.addCardClickListener(card);
-    } else {
-        console.warn('Hàm window.addCardClickListener không tồn tại khi tạo card.');
+    return card; // Listener click sẽ được gắn bởi hàm gọi nó
+}
+
+// --- Hàm tạo một mục bài hát trong danh sách (kiểu bảng) ---
+function createSongListItem(songData, index, artistNameToDisplay) {
+    const songItem = document.createElement('div');
+    songItem.classList.add('song-list-item');
+    songItem.dataset.src = songData.audioSrc || '';
+    songItem.dataset.title = songData.title || 'Không có tiêu đề';
+    songItem.dataset.artist = artistNameToDisplay || songData.artistData || 'N/A';
+    songItem.dataset.art = songData.albumArt || songData.artUrl || 'https://via.placeholder.com/40';
+
+    const durationDisplay = songData.duration || 'N/A'; // Duration đã được tính toán và truyền vào
+
+    songItem.innerHTML = `
+        <span class="song-index">${index}</span>
+        <img src="${songData.albumArt || songData.artUrl || 'https://via.placeholder.com/40'}" alt="${songData.title || 'Art'}" class="album-art-small">
+        <div class="song-details">
+            <div class="song-title">${songData.title || 'Không có tiêu đề'}</div>
+            
+        </div>
+        <div class="song-artist-column">${artistNameToDisplay || 'Nghệ sĩ không xác định'}</div>
+        <div class="song-plays">${songData.plays || 'N/A'}</div>
+        <div class="song-duration">${durationDisplay}</div>
+        <div class="song-actions">
+            <button title="Thích" class="like-song-btn" data-song-id="${songData.id || ''}">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+        </div>
+    `;
+
+    // Listener click cho toàn bộ item sẽ được gắn bởi hàm gọi createSongListItem,
+    // vì nó cần context của `playlistArray` (ví dụ: `songsToDisplay`).
+
+    // Xử lý nút like
+    const likeBtn = songItem.querySelector('.like-song-btn');
+    if (likeBtn) {
+        if (songData.isFavorite) {
+            likeBtn.classList.add('liked');
+            likeBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="#1DB954"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+        }
+        likeBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Ngăn sự kiện click của item cha
+            this.classList.toggle('liked');
+            songData.isFavorite = this.classList.contains('liked'); // Cập nhật trong phiên
+            this.innerHTML = songData.isFavorite ?
+                '<svg viewBox="0 0 24 24" width="18" height="18" fill="#1DB954"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' :
+                '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+        });
     }
-
-    return card;
+    return songItem;
 }
 
-// Hàm format thời gian (MM:SS)
-function formatTime(seconds) {
-    if (isNaN(seconds)) return "0:00";
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-}
 // --- Hàm render các link playlist trong sidebar ---
-// sectionsData: Mảng dữ liệu (ví dụ: ALL_MUSIC_SECTIONS)
-// targetUlElement: Phần tử <ul> trong sidebar để chèn link vào
 function renderPlaylistLinks(sectionsData, targetUlElement) {
-    if (!targetUlElement) {
-        console.error("Lỗi: Không tìm thấy phần tử UL mục tiêu cho playlist.");
-        return;
-    }
+    if (!targetUlElement) return;
     if (!sectionsData || !Array.isArray(sectionsData)) {
-        console.error("Lỗi: Dữ liệu section không hợp lệ.");
-        targetUlElement.innerHTML = '<li>Lỗi tải playlist</li>'; // Thông báo lỗi
-        return;
+        targetUlElement.innerHTML = '<li>Lỗi tải playlist</li>'; return;
     }
-
-    targetUlElement.innerHTML = ''; // Xóa các link cũ trước khi tạo mới
+    targetUlElement.innerHTML = '';
+    const currentPage = window.location.pathname.split("/").pop();
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPlaylistId = urlParams.get('id');
 
     sectionsData.forEach(section => {
-        // Chỉ tạo link nếu section có id và title hợp lệ
         if (section && section.id && section.title) {
             const listItem = document.createElement('li');
             const link = document.createElement('a');
-
-            link.href = `#${section.id}`; // href trỏ đến ID của section
-            link.textContent = section.title; // Text là tiêu đề section
-
-            // Có thể thêm class nếu cần style riêng
-            // link.classList.add('sidebar-playlist-link');
-
+            link.href = `playlist.html?id=${encodeURIComponent(section.id)}`;
+            link.textContent = section.title;
+            if (currentPage === 'playlist.html' && currentPlaylistId === section.id) {
+                link.classList.add('active-playlist-link');
+            }
             listItem.appendChild(link);
             targetUlElement.appendChild(listItem);
         }
     });
-    console.log("Playlist links rendered."); // Để kiểm tra
 }
 
-// Expose hàm renderPlaylistLinks ra global
+// Expose các hàm ra global để các file khác có thể sử dụng
+window.formatTime = formatTime;
+window.getAudioFileDuration = getAudioFileDuration;
+window.createSongCard = createSongCard;
+window.createSongListItem = createSongListItem;
 window.renderPlaylistLinks = renderPlaylistLinks;
 
-// --- Hàm gắn listener cho Smooth scroll (có thể giữ ở main.js hoặc chuyển vào đây) ---
-// Nếu chuyển vào đây, nó sẽ dùng chung, nhưng chỉ có ý nghĩa trên trang có các section target
-function attachSmoothScrollListeners(linkSelector, scrollContainerSelector) {
-    const playlistLinks = document.querySelectorAll(linkSelector);
-    const mainContentElement = document.querySelector(scrollContainerSelector);
-
-     if (playlistLinks.length > 0 && mainContentElement) {
-         console.log(`Attaching smooth scroll to ${playlistLinks.length} links.`); // Kiểm tra
-         playlistLinks.forEach(link => {
-             // Gỡ listener cũ nếu có thể (phức tạp hơn, tạm bỏ qua)
-             link.addEventListener('click', function handleSmoothScroll(event) {
-                 event.preventDefault();
-                 const targetId = this.getAttribute('href');
-                 if (targetId && targetId.startsWith('#') && targetId.length > 1) {
-                     try {
-                         const targetSection = document.getElementById(targetId.substring(1)); // Dùng getElementById hiệu quả hơn cho ID
-                         if (targetSection) {
-                              // Kiểm tra xem targetSection có thực sự nằm trong mainContentElement không nếu cần
-                             if (mainContentElement.contains(targetSection)) {
-                                 targetSection.scrollIntoView({
-                                     behavior: 'smooth',
-                                     block: 'start'
-                                 });
-                             } else {
-                                  console.warn(`Section ${targetId} không nằm trong ${scrollContainerSelector}.`);
-                             }
-                         } else {
-                             console.warn(`Không tìm thấy section với ID: ${targetId}`);
-                         }
-                     } catch (e) {
-                         console.error(`Lỗi khi tìm selector: ${targetId}`, e);
-                     }
-                 }
-             });
-         });
-     } else {
-          if(playlistLinks.length === 0) console.warn("Không tìm thấy link playlist nào để gắn smooth scroll.");
-          if(!mainContentElement) console.warn("Không tìm thấy container cuộn chính.");
-     }
-}
-
-// Expose hàm attachSmoothScrollListeners ra global
-window.attachSmoothScrollListeners = attachSmoothScrollListeners;
-
-
-console.log("utils.js loaded with playlist functions");
+console.log("utils.js loaded successfully.");
