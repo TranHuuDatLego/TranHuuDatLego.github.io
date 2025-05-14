@@ -75,6 +75,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if(artistsLink) artistsLink.classList.add('active');
 
     console.log("Artists DOMContentLoaded End");
+
+    // --- Logic Sidebar Toggle (Có thể tách ra ui.js) ---
+    const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+    const sidebar = document.querySelector('.sidebar');
+    // const mainContentForOverlay = document.querySelector('.main-content'); // Không cần nếu overlay thêm vào body
+
+    if (menuToggleBtn && sidebar) {
+        menuToggleBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            sidebar.classList.toggle('active');
+            toggleSidebarOverlay(sidebar.classList.contains('active'));
+        });
+    }
+
+    // Đóng sidebar khi click ra ngoài
+    document.addEventListener('click', (event) => {
+        if (sidebar && sidebar.classList.contains('active') &&
+            !sidebar.contains(event.target) &&
+            event.target !== menuToggleBtn) {
+            sidebar.classList.remove('active');
+            toggleSidebarOverlay(false);
+        }
+    });
 });
 
 console.log("artists.js loaded");

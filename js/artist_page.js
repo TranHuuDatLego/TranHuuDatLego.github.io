@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Hiển thị thông báo lỗi trên trang hoặc redirect
         artistProfileName.textContent = "Nghệ sĩ không tồn tại";
         // Ẩn các phần khác hoặc hiển thị thông báo
-        document.getElementById('artist-main-content').innerHTML = `<div style="padding:20px; text-align:center;"><h2>Không tìm thấy nghệ sĩ</h2><p>Vui lòng kiểm tra lại đường dẫn hoặc thử lại sau.</p></div>`;
+        document.getElementById('artist-main-content').innerHTML = `<div style="padding:20px; text-align:center;"><h2>Không tìm thấy nghệ sĩ</h2><p>Thông tin nghệ sĩ đang được cập nhật</p></div>`;
         return; // Dừng thực thi nếu không có dữ liệu
     }
 

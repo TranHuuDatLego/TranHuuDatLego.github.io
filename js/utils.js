@@ -67,84 +67,35 @@ function formatTime(seconds) {
 // --- Hàm render các link playlist trong sidebar ---
 // sectionsData: Mảng dữ liệu (ví dụ: ALL_MUSIC_SECTIONS)
 // targetUlElement: Phần tử <ul> trong sidebar để chèn link vào
+// --- Hàm render các link playlist trong sidebar ---
 function renderPlaylistLinks(sectionsData, targetUlElement) {
-    if (!targetUlElement) {
-        console.error("Lỗi: Không tìm thấy phần tử UL mục tiêu cho playlist.");
-        return;
-    }
+    if (!targetUlElement) return;
     if (!sectionsData || !Array.isArray(sectionsData)) {
-        console.error("Lỗi: Dữ liệu section không hợp lệ.");
-        targetUlElement.innerHTML = '<li>Lỗi tải playlist</li>'; // Thông báo lỗi
-        return;
+        targetUlElement.innerHTML = '<li>Lỗi tải playlist</li>'; return;
     }
-
-    targetUlElement.innerHTML = ''; // Xóa các link cũ trước khi tạo mới
+    targetUlElement.innerHTML = '';
+    const currentPage = window.location.pathname.split("/").pop();
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPlaylistId = urlParams.get('id');
 
     sectionsData.forEach(section => {
-        // Chỉ tạo link nếu section có id và title hợp lệ
         if (section && section.id && section.title) {
             const listItem = document.createElement('li');
             const link = document.createElement('a');
-
-            link.href = `#${section.id}`; // href trỏ đến ID của section
-            link.textContent = section.title; // Text là tiêu đề section
-
-            // Có thể thêm class nếu cần style riêng
-            // link.classList.add('sidebar-playlist-link');
-
+            link.href = `playlist.html?id=${encodeURIComponent(section.id)}`;
+            link.textContent = section.title;
+            if (currentPage === 'playlist.html' && currentPlaylistId === section.id) {
+                link.classList.add('active-playlist-link');
+            }
             listItem.appendChild(link);
             targetUlElement.appendChild(listItem);
         }
     });
-    console.log("Playlist links rendered."); // Để kiểm tra
 }
 
 // Expose hàm renderPlaylistLinks ra global
 window.renderPlaylistLinks = renderPlaylistLinks;
 
-// --- Hàm gắn listener cho Smooth scroll (có thể giữ ở main.js hoặc chuyển vào đây) ---
-// Nếu chuyển vào đây, nó sẽ dùng chung, nhưng chỉ có ý nghĩa trên trang có các section target
-function attachSmoothScrollListeners(linkSelector, scrollContainerSelector) {
-    const playlistLinks = document.querySelectorAll(linkSelector);
-    const mainContentElement = document.querySelector(scrollContainerSelector);
-
-     if (playlistLinks.length > 0 && mainContentElement) {
-         console.log(`Attaching smooth scroll to ${playlistLinks.length} links.`); // Kiểm tra
-         playlistLinks.forEach(link => {
-             // Gỡ listener cũ nếu có thể (phức tạp hơn, tạm bỏ qua)
-             link.addEventListener('click', function handleSmoothScroll(event) {
-                 event.preventDefault();
-                 const targetId = this.getAttribute('href');
-                 if (targetId && targetId.startsWith('#') && targetId.length > 1) {
-                     try {
-                         const targetSection = document.getElementById(targetId.substring(1)); // Dùng getElementById hiệu quả hơn cho ID
-                         if (targetSection) {
-                              // Kiểm tra xem targetSection có thực sự nằm trong mainContentElement không nếu cần
-                             if (mainContentElement.contains(targetSection)) {
-                                 targetSection.scrollIntoView({
-                                     behavior: 'smooth',
-                                     block: 'start'
-                                 });
-                             } else {
-                                  console.warn(`Section ${targetId} không nằm trong ${scrollContainerSelector}.`);
-                             }
-                         } else {
-                             console.warn(`Không tìm thấy section với ID: ${targetId}`);
-                         }
-                     } catch (e) {
-                         console.error(`Lỗi khi tìm selector: ${targetId}`, e);
-                     }
-                 }
-             });
-         });
-     } else {
-          if(playlistLinks.length === 0) console.warn("Không tìm thấy link playlist nào để gắn smooth scroll.");
-          if(!mainContentElement) console.warn("Không tìm thấy container cuộn chính.");
-     }
-}
-
-// Expose hàm attachSmoothScrollListeners ra global
-window.attachSmoothScrollListeners = attachSmoothScrollListeners;
 
 
 console.log("utils.js loaded with playlist functions");

@@ -168,6 +168,138 @@ const ALL_MUSIC_SECTIONS = [
                 plays: "3.015.888" // Random
             }
         ]
+    },
+    {
+        id: "GenshinImpactOST",
+        title: "Genshin Impact - Original Soundtrack",
+        songs: [
+            {
+                id: "gi1",
+                title: "Hanachirusato",
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/hanachirusato.png",
+                audioSrc: "audio/hanachirusato.mp3",
+                isFavorite: true,
+                plays: "3.105.721"
+            },
+            {
+                id: "gi2",
+                title: "Fragile Fantasy",
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/fragile_fantasy.png",
+                audioSrc: "audio/fragile_fantasy.mp3",
+                isFavorite: false,
+                plays: "2.876.543"
+            },
+            {
+                id: "gi3",
+                title: "Genshin Impact Main Theme",
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/genshin_impact_main_theme.png",
+                audioSrc: "audio/genshin_impact_main_theme.mp3",
+                isFavorite: true,
+                plays: "10.543.210"
+            },
+            {
+                id: "gi4",
+                title: "Rapid as Wildfires",
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/rapid_as_wildfires.png",
+                audioSrc: "audio/rapid_as_wildfires.mp3",
+                isFavorite: false,
+                plays: "1.987.321"
+            },
+            {
+                id: "gi5",
+                title: "Fleeting Colors in Flight",
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/fleeting_colors_in_flight.png",
+                audioSrc: "audio/fleeting_colors_in_flight.mp3",
+                isFavorite: true,
+                plays: "4.001.888"
+            },
+            {
+                id: "gi6",
+                title: "Immaculate Ardency",
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/immaculate_ardency.png",
+                audioSrc: "audio/immaculate_ardency.mp3",
+                isFavorite: false,
+                plays: "2.345.678"
+            },
+            {
+                id: "gi7",
+                title: "A Memory Fancy", // Giữ title dễ đọc
+                artistData: "HOYO-MiX",
+                displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
+                artUrl: "img/a_memory_facny.png", // Giữ nguyên tên file từ ảnh
+                audioSrc: "audio/a_memory_facny.mp3", // Giữ nguyên tên file từ ảnh
+                isFavorite: true,
+                plays: "1.500.900"
+            }
+        ]
+    },
+    {
+        id: "BlueArchiveOST",
+        title: "Blue Archive - Original Soundtrack",
+        songs: [
+            {
+                id: "ba1",
+                title: "Memories Of Kindness",
+                artistData: "NEXON Games", // Hoặc "Blue Archive Sound Team" nếu bạn muốn cụ thể hơn
+                displayArtist: { name: "NEXON Games", id: "NEXONGames" },
+                artUrl: "img/memories_of_kindness.png",
+                audioSrc: "audio/memories_of_kindness.mp3",
+                isFavorite: true,
+                plays: "2.501.337"
+            },
+            {
+                id: "ba2",
+                title: "Luminous Memory",
+                artistData: "NEXON Games",
+                displayArtist: { name: "NEXON Games", id: "NEXONGames" },
+                artUrl: "img/Luminous_Memory.png",
+                audioSrc: "audio/Luminous Memory.mp3",
+                isFavorite: false,
+                plays: "1.987.654"
+            },
+            {
+                id: "ba3",
+                title: "Seishun No Archive",
+                artistData: "NEXON Games",
+                displayArtist: { name: "NEXON Games", id: "NEXONGames" },
+                artUrl: "img/Seishun_No_Archive.png",
+                audioSrc: "audio/Seishun_No_Archive.mp3",
+                isFavorite: true,
+                plays: "3.015.888"
+            },
+            {
+                id: "ba4",
+                title: "Seishun No Archive (Instrumental)", // Thêm (Instrumental) vào title
+                artistData: "NEXON Games",
+                displayArtist: { name: "NEXON Games", id: "NEXONGames" },
+                artUrl: "img/Seishun_No_Archive.png", // Dùng chung art với bản gốc
+                audioSrc: "audio/Seishun_No_Archive Instrumental.mp3", // Tên file có dấu cách
+                isFavorite: false,
+                plays: "1.203.405"
+            },
+            {
+                id: "ba5",
+                title: "Constant Moderato Anime",
+                artistData: "NEXON Games",
+                displayArtist: { name: "NEXON Games", id: "NEXONGames" },
+                artUrl: "img/Constant_Moderato_Anime.png",
+                audioSrc: "audio/Constant_Moderato_Anime.mp3",
+                isFavorite: true,
+                plays: "2.777.999"
+            }
+        ]
     }
 ];
 
