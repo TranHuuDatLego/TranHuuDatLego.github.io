@@ -33,7 +33,7 @@ const ALL_MUSIC_SECTIONS = [
                 artUrl: "img/nal.png",
                 audioSrc: "audio/thay-long-nal.mp3",
                 isFavorite: false, // Ví dụ
-                plays: "440.789.123" // Random
+                plays: "40.789.123" // Random
             },
             {
                 id: "fav4",
@@ -166,6 +166,16 @@ const ALL_MUSIC_SECTIONS = [
                 audioSrc: "audio/Summer_Pockets_Asterlore.mp3",
                 isFavorite: true, // Ví dụ
                 plays: "3.015.888" // Random
+            },
+            {
+                id: "sp7",
+                title: "羽のゆりかご - Instrumental",
+                artistData: "水谷瑠奈 (NanosizeMir)",
+                displayArtist: { name: "水谷瑠奈 (NanosizeMir)", id: "RunaMizutani" },
+                artUrl: "img/Hane no Yurikago Instrumental.png",
+                audioSrc: "audio/Hane no Yurikago Instrumental.mp3",
+                isFavorite: false, // Ví dụ
+                plays: "223.654" // Random
             }
         ]
     },
@@ -238,8 +248,8 @@ const ALL_MUSIC_SECTIONS = [
                 title: "A Memory Fancy", // Giữ title dễ đọc
                 artistData: "HOYO-MiX",
                 displayArtist: { name: "HOYO-MiX", id: "HOYOMiX" },
-                artUrl: "img/a_memory_facny.png", // Giữ nguyên tên file từ ảnh
-                audioSrc: "audio/a_memory_facny.mp3", // Giữ nguyên tên file từ ảnh
+                artUrl: "img/a_memory_fancy.png", // Giữ nguyên tên file từ ảnh
+                audioSrc: "audio/a_memory_fancy.mp3", // Giữ nguyên tên file từ ảnh
                 isFavorite: true,
                 plays: "1.500.900"
             }
